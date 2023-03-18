@@ -15,7 +15,9 @@ def fetch(url):
         # utilizando a função requests.get
         # Caso a requisição não receba resposta em até 3 segundos,
         # ela deve ser abandonada
-        response = requests.get(url, timeout=3)
+        response = requests.get(
+            url, headers={"user-agent": "Fake user-agent"}, timeout=3
+            )
         # Caso a requisição seja bem sucedida com Status Code 200: OK,
         # deve ser retornado seu conteúdo de texto;
         if response.status_code == 200:
@@ -28,6 +30,10 @@ def fetch(url):
         return None
 
 
+# print(fetch("https://blog.betrybe.com"))
+# print("hello, word")
+
+
 # Requisito 2
 def scrape_updates(html_content):
     """Seu código deve vir aqui"""
@@ -38,13 +44,19 @@ def scrape_updates(html_content):
 
 
 """ html = fetch("https://blog.betrybe.com/")
-scrape_updates(html)
- """
+print(scrape_updates(html)) """
 
 
 # Requisito 3
 def scrape_next_page_link(html_content):
     """Seu código deve vir aqui"""
+    selector = Selector(text=html_content)
+    next_page = selector.css(".next.page-numbers ::attr(href)").get()
+    # o seletor next a.page-numbers ::attr(href) está errado porque
+    # não precisa referenciar que é um link, só passar a classe
+    if next_page:
+        return next_page
+    return None
 
 
 # Requisito 4
