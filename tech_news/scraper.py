@@ -1,6 +1,7 @@
 from parsel import Selector
 import requests
 import time
+from tech_news.database import create_news
 
 
 #  Requisito 1
@@ -92,3 +93,36 @@ scrape_news(html) """
 # Requisito 5
 def get_tech_news(amount):
     """Seu código deve vir aqui"""
+    # 1 - Eu pego a primeira página de notícias e trago o html dela
+    # 2 - faço um for em cada notícia para trazer as informações e adicioná-las
+    # a um array e a cada for aumenta um contador para que eu possa
+    # saber em qual número
+    # está o contador para ter um limite, cujo este vem por parâmetro.
+    # 3 - Se o limite de notícias não tiver na primeira página, então vamos
+    # para a segunda. E assim até chegar ao limite de news ou não
+    # ter mais página
+    # 4 - Na página seguinte repete o processo 2
+    # 5 - Coloca esse array no banco de dados
+    # 6 - retorna o array
+
+    url = "https://blog.betrybe.com/"
+    list_news = []
+    number_news = 0
+    while number_news <= amount:  # 4
+        response = fetch(url)  # 1
+        selector_links = scrape_updates(response)
+        for response_news in selector_links:  # 2
+            html_news = fetch(response_news)
+            data_news = scrape_news(html_news)
+            list_news.append(data_news)
+            number_news += 1
+            if number_news == amount:
+                break
+        url = scrape_next_page_link(response)
+        if url is None or number_news == amount:  # 3
+            break
+        # next_page = url babaquice do caraca, sem else
+    create_news(list_news)  # 5
+    return list_news  # 6
+
+# print(get_tech_news(2))
