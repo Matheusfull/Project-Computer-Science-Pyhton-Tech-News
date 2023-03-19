@@ -61,7 +61,32 @@ def scrape_next_page_link(html_content):
 
 # Requisito 4
 def scrape_news(html_content):
-    """Seu código deve vir aqui"""
+    selector = Selector(text=html_content)
+    url = selector.css("link[rel=canonical]::attr(href)").get()
+    title = selector.css(".entry-title::text").get().replace("\xa0", "")
+    timestamp = selector.css("li.meta-date::text").get()
+    writer = selector.css("a.n::text").get()
+    reading_time = int(selector.css("li.meta-reading-time::text").get()[0:2])
+    summary = "".join(
+        selector.css(".entry-content > p:first-of-type *::text").getall()
+    ).strip()
+    category = selector.css(".category-style .label::text").get()
+    # print(summary)
+    return {
+        "url": url,
+        "title": title,
+        "timestamp": timestamp,
+        "writer": writer,
+        "reading_time": reading_time,
+        "summary": summary,
+        "category": category
+    }
+
+
+""" html = fetch("https://blog.betrybe.com/")
+scrape_news(html) """
+# reading_time = int(selector.css("li.meta-reading-time::text").
+# re_first(r"\d{2}"))- Requisito bem chatinho
 
 
 # Requisito 5
