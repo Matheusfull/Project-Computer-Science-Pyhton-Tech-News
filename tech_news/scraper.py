@@ -125,4 +125,4 @@ def get_tech_news(amount):
     create_news(list_news)  # 5
     return list_news  # 6
 
-# print(get_tech_news(2))
+# print(get_tech_news(20))
