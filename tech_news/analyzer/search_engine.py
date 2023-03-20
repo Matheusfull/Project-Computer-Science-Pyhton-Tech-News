@@ -14,7 +14,7 @@ def search_by_title(title):
     return search_filter
 
 
-print(search_by_title("Algoritmo"))
+# print(search_by_title("Algoritmo"))
 
 
 # Requisito 8
@@ -25,3 +25,13 @@ def search_by_date(date):
 # Requisito 9
 def search_by_category(category):
     """Seu código deve vir aqui"""
+    array_search_category = search_news(
+        {"category": {"$regex": category, "$options": "i"}}
+        )
+    search_filter = [
+        (el["title"], el["url"]) for el in array_search_category
+    ]
+    return search_filter
+
+
+# print(search_by_category("Ferramentas"))
